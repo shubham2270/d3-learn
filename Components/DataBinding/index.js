@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
 import map from "../../data/map.json";
@@ -18,15 +18,22 @@ const indiaJson = {
   ],
 };
 
-let aa = [73.490402, 23.786453];
-let bb = [73.389809, 23.72728];
-let cc = [31.376953125, 18.145851771694467];
-let dd = [88.06640625, 31.952162238024975];
+const aa = [103.623046875, 2.28455066023697];
+const bb = [73.389809, 23.72728];
+const cc = [31.376953125, 18.145851771694467];
+const dd = [88.06640625, 31.952162238024975];
+
+let plots = [aa, bb, cc, dd];
+
+// get random coordinates
 
 const DataBinding = () => {
+  const [point, setPoint] = useState([88.06640625, 31.952162238024975]);
   const svgRef = useRef(null);
 
   useEffect(() => {
+    let coordinate = [88.06640625, 31.952162238024975];
+
     let geojson = {
       type: "FeatureCollection",
       features: [
@@ -101,13 +108,26 @@ const DataBinding = () => {
 
     svg
       .selectAll("circle")
-      .data([bb, aa, cc, dd])
+      .data([point])
       .join("circle")
       .attr("cx", (d) => projection(d)[0])
       .attr("cy", (d) => projection(d)[1])
       .attr("r", "5px")
-      .attr("fill", "red");
-  }, []);
+      .transition()
+      .duration(750)
+      .ease(d3.easeLinear)
+      .style("fill", "red");
+
+    const t = d3.transition().duration(750).ease(d3.easeLinear);
+
+    const random = setInterval(() => {
+      let coordinate = plots[Math.floor(Math.random() * plots.length)];
+      setPoint(coordinate);
+    }, 1000);
+    // d3.select("circle").remove();
+
+    return () => clearInterval(random);
+  }, [point]);
 
   return (
     <div>
