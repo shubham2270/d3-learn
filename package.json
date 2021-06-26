@@ -9,8 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "d3": "^7.0.0",
+    "d3": "^6.7.0",
     "next": "11.0.1",
+    "next-transpile-modules": "^8.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },
