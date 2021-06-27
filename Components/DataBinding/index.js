@@ -15,6 +15,30 @@ const indiaJson = {
         coordinates: [77.87109375, 26.27371402440643],
       },
     },
+    {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Point",
+        coordinates: [103.623046875, 2.28455066023697],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Point",
+        coordinates: [31.376953125, 18.145851771694467],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Point",
+        coordinates: [88.06640625, 31.952162238024975],
+      },
+    },
   ],
 };
 
@@ -28,7 +52,8 @@ let plots = [aa, bb, cc, dd];
 // get random coordinates
 
 const DataBinding = () => {
-  const [point, setPoint] = useState([88.06640625, 31.952162238024975]);
+  const [point, setPoint] = useState(indiaJson);
+  // const [point, setPoint] = useState([88.06640625, 31.952162238024975]);
   const svgRef = useRef(null);
 
   useEffect(() => {
@@ -108,30 +133,45 @@ const DataBinding = () => {
 
     svg
       .selectAll("circle")
-      .data([point])
+      .data(point?.features)
       .join("circle")
-      .attr("cx", (d) => projection(d)[0])
+      .attr("cx", (d) => {
+        console.log("==", d);
+        return projection(d)[0];
+      })
       .attr("cy", (d) => projection(d)[1])
       .attr("r", "5px")
+      .attr("transform", (d) => {
+        console.log("===", geoGenerator.centroid(d), d);
+        return `translate(${geoGenerator.centroid(d)})`;
+      })
+      .style("opacity", "0")
       .transition()
-      .duration(750)
+      .duration(900)
       .ease(d3.easeLinear)
+      .style("opacity", "1")
       .style("fill", "red");
 
     const t = d3.transition().duration(750).ease(d3.easeLinear);
-
-    const random = setInterval(() => {
-      let coordinate = plots[Math.floor(Math.random() * plots.length)];
-      setPoint(coordinate);
-    }, 1000);
+    let tempCoordinate = [];
+    // const random = setInterval(() => {
+    //   let coordinate = plots[Math.floor(Math.random() * plots.length)];
+    //   tempCoordinate = [...tempCoordinate, coordinate];
+    //   if (tempCoordinate.length > 4) {
+    //     tempCoordinate.pop();
+    //   }
+    //   console.log(">>>>", tempCoordinate);
+    //   setPoint(coordinate);
+    // }, 1200);
     // d3.select("circle").remove();
+    console.log("hh");
 
-    return () => clearInterval(random);
+    // return () => clearInterval(random);
   }, [point]);
 
   return (
     <div>
-      <svg ref={svgRef} width='800' height='400'></svg>
+      <svg ref={svgRef} width='1600' height='1000'></svg>
     </div>
   );
 };
