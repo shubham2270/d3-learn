@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
+import * as R from "ramda";
 
 import map from "../../data/map.json";
 import { geoEquirectangular, svg } from "d3";
@@ -39,15 +40,80 @@ const indiaJson = {
         coordinates: [88.06640625, 31.952162238024975],
       },
     },
+    {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Point",
+        coordinates: [125.5078125, -20.96143961409684],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Point",
+        coordinates: [23.90625, -27.68352808378776],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Point",
+        coordinates: [117.0703125, 32.84267363195431],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Point",
+        coordinates: [-1.0546875, 19.642587534013032],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Point",
+        coordinates: [-47.109375, -10.833305983642491],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Point",
+        coordinates: [77.16796875, 14.774882506516272],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Point",
+        coordinates: [84.0234375, 24.046463999666567],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Point",
+        coordinates: [115.31249999999999, 4.740675384778373],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Point",
+        coordinates: [47.28515625, 26.115985925333536],
+      },
+    },
   ],
 };
-
-const aa = [103.623046875, 2.28455066023697];
-const bb = [73.389809, 23.72728];
-const cc = [31.376953125, 18.145851771694467];
-const dd = [88.06640625, 31.952162238024975];
-
-let plots = [aa, bb, cc, dd];
 
 // get random coordinates
 
@@ -135,38 +201,72 @@ const DataBinding = () => {
       .selectAll("circle")
       .data(point?.features)
       .join("circle")
+      .attr("r", "5px")
+      .attr("transform", (d) => {
+        // console.log("===", geoGenerator.centroid(d), d);
+        return `translate(${geoGenerator.centroid(d)})`;
+      })
       .attr("cx", (d) => {
-        console.log("==", d);
+        // console.log("==", d);
         return projection(d)[0];
       })
       .attr("cy", (d) => projection(d)[1])
-      .attr("r", "5px")
-      .attr("transform", (d) => {
-        console.log("===", geoGenerator.centroid(d), d);
-        return `translate(${geoGenerator.centroid(d)})`;
-      })
       .style("opacity", "0")
+      .style("fill", "blue")
       .transition()
-      .duration(900)
+      .duration(2000)
       .ease(d3.easeLinear)
       .style("opacity", "1")
       .style("fill", "red");
 
-    const t = d3.transition().duration(750).ease(d3.easeLinear);
-    let tempCoordinate = [];
-    // const random = setInterval(() => {
-    //   let coordinate = plots[Math.floor(Math.random() * plots.length)];
-    //   tempCoordinate = [...tempCoordinate, coordinate];
-    //   if (tempCoordinate.length > 4) {
-    //     tempCoordinate.pop();
-    //   }
-    //   console.log(">>>>", tempCoordinate);
-    //   setPoint(coordinate);
-    // }, 1200);
-    // d3.select("circle").remove();
-    console.log("hh");
+    const randomRemove = setInterval(() => {
+      let randomIndex = Math.floor(Math.random() * point.length);
+      let pickRandomCoordinate = indiaJson?.features[randomIndex];
 
-    // return () => clearInterval(random);
+      let allCord = point.features;
+      let tempPoint;
+      // Remove random coordinate from state array;
+      allCord.splice(randomIndex, 1);
+
+      // allCord.pop(pickRandomCoordinate);
+      tempPoint = {
+        ...point,
+        features: [...allCord],
+      };
+
+      // Reset coordinates if they are less then 6
+      if (point.features.length < 6) {
+        setPoint(indiaJson);
+      } else {
+        setPoint(tempPoint);
+      }
+    }, 300);
+
+    const randomAdd = setInterval(() => {
+      let pickRandomCoordinate =
+        indiaJson?.features[
+          Math.floor(Math.random() * indiaJson?.features.length)
+        ];
+
+      let allCord = point.features;
+      let tempPoint;
+
+      // Add random coordinate into state array;
+      allCord.push(pickRandomCoordinate);
+      const uniqueCord = R.uniq(allCord);
+      tempPoint = {
+        ...point,
+        features: [...allCord],
+      };
+
+      setPoint(tempPoint);
+    }, 300);
+    console.log("-----", point);
+
+    return () => {
+      clearInterval(randomRemove);
+      clearInterval(randomAdd);
+    };
   }, [point]);
 
   return (
