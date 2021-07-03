@@ -10,7 +10,9 @@ const indiaJson = {
   features: [
     {
       type: "Feature",
-      properties: {},
+      properties: {
+        image: "https://randomuser.me/api/portraits/thumb/men/70.jpg",
+      },
       geometry: {
         type: "Point",
         coordinates: [77.87109375, 26.27371402440643],
@@ -18,7 +20,9 @@ const indiaJson = {
     },
     {
       type: "Feature",
-      properties: {},
+      properties: {
+        image: "https://randomuser.me/api/portraits/thumb/men/71.jpg",
+      },
       geometry: {
         type: "Point",
         coordinates: [103.623046875, 2.28455066023697],
@@ -26,7 +30,9 @@ const indiaJson = {
     },
     {
       type: "Feature",
-      properties: {},
+      properties: {
+        image: "https://randomuser.me/api/portraits/thumb/men/72.jpg",
+      },
       geometry: {
         type: "Point",
         coordinates: [31.376953125, 18.145851771694467],
@@ -34,7 +40,9 @@ const indiaJson = {
     },
     {
       type: "Feature",
-      properties: {},
+      properties: {
+        image: "https://randomuser.me/api/portraits/thumb/men/69.jpg",
+      },
       geometry: {
         type: "Point",
         coordinates: [88.06640625, 31.952162238024975],
@@ -42,7 +50,9 @@ const indiaJson = {
     },
     {
       type: "Feature",
-      properties: {},
+      properties: {
+        image: "https://randomuser.me/api/portraits/thumb/men/68.jpg",
+      },
       geometry: {
         type: "Point",
         coordinates: [125.5078125, -20.96143961409684],
@@ -50,7 +60,9 @@ const indiaJson = {
     },
     {
       type: "Feature",
-      properties: {},
+      properties: {
+        image: "https://randomuser.me/api/portraits/thumb/men/65.jpg",
+      },
       geometry: {
         type: "Point",
         coordinates: [23.90625, -27.68352808378776],
@@ -58,7 +70,9 @@ const indiaJson = {
     },
     {
       type: "Feature",
-      properties: {},
+      properties: {
+        image: "https://randomuser.me/api/portraits/thumb/men/64.jpg",
+      },
       geometry: {
         type: "Point",
         coordinates: [117.0703125, 32.84267363195431],
@@ -66,7 +80,9 @@ const indiaJson = {
     },
     {
       type: "Feature",
-      properties: {},
+      properties: {
+        image: "https://randomuser.me/api/portraits/thumb/men/63.jpg",
+      },
       geometry: {
         type: "Point",
         coordinates: [-1.0546875, 19.642587534013032],
@@ -74,7 +90,9 @@ const indiaJson = {
     },
     {
       type: "Feature",
-      properties: {},
+      properties: {
+        image: "https://randomuser.me/api/portraits/thumb/men/62.jpg",
+      },
       geometry: {
         type: "Point",
         coordinates: [-47.109375, -10.833305983642491],
@@ -82,7 +100,9 @@ const indiaJson = {
     },
     {
       type: "Feature",
-      properties: {},
+      properties: {
+        image: "https://randomuser.me/api/portraits/thumb/men/61.jpg",
+      },
       geometry: {
         type: "Point",
         coordinates: [77.16796875, 14.774882506516272],
@@ -90,7 +110,9 @@ const indiaJson = {
     },
     {
       type: "Feature",
-      properties: {},
+      properties: {
+        image: "https://randomuser.me/api/portraits/thumb/men/60.jpg",
+      },
       geometry: {
         type: "Point",
         coordinates: [84.0234375, 24.046463999666567],
@@ -98,7 +120,9 @@ const indiaJson = {
     },
     {
       type: "Feature",
-      properties: {},
+      properties: {
+        image: "https://randomuser.me/api/portraits/thumb/men/59.jpg",
+      },
       geometry: {
         type: "Point",
         coordinates: [115.31249999999999, 4.740675384778373],
@@ -106,7 +130,9 @@ const indiaJson = {
     },
     {
       type: "Feature",
-      properties: {},
+      properties: {
+        image: "https://randomuser.me/api/portraits/thumb/men/58.jpg",
+      },
       geometry: {
         type: "Point",
         coordinates: [47.28515625, 26.115985925333536],
@@ -197,27 +223,52 @@ const DataBinding = () => {
       .attr("stroke", "grey")
       .attr("fill", "lightgrey");
 
+    // const appendCircle = (selection) => {
+    //   svg
+    //     .selectAll("circle")
+    //     .data(point?.features)
+    //     .join("circle")
+    //     .attr("r", "8px")
+    //     // .attr("transform", (d) => `translate(${geoGenerator.centroid(d)})`)
+    //     // .attr("cx", (d) => {
+    //     //   console.log(projection(d));
+    //     //   return projection(d)[0];
+    //     // })
+    //     // .attr("cy", (d) => projection(d)[1])
+    //     .attr("cx", (d) => {
+    //       // console.log(projection(d.geometry.coordinates));
+    //       return projection(d.geometry.coordinates)[0];
+    //     })
+    //     .attr("cy", (d) => projection(d.geometry.coordinates)[1])
+    //     .style("opacity", "0")
+    //     .style("fill", "white")
+    //     .transition()
+    //     .duration(1400)
+    //     .ease(d3.easeLinear)
+    //     .style("opacity", "1")
+    //     .style("fill", "pink")
+    //     .attr("stroke", "red")
+    //     .attr("stroke-width", "2");
+    // };
+
     svg
-      .selectAll("circle")
+      .selectAll("image")
       .data(point?.features)
-      .join("circle")
-      .attr("r", "5px")
-      .attr("transform", (d) => {
-        // console.log("===", geoGenerator.centroid(d), d);
-        return `translate(${geoGenerator.centroid(d)})`;
+      .join("image")
+      .attr("x", (d) => {
+        // console.log(projection(d.geometry.coordinates));
+        return projection(d.geometry.coordinates)[0];
       })
-      .attr("cx", (d) => {
-        // console.log("==", d);
-        return projection(d)[0];
-      })
-      .attr("cy", (d) => projection(d)[1])
+      .attr("y", (d) => projection(d.geometry.coordinates)[1])
+      .attr("width", 25 + "px")
+      .attr("height", 25 + "px")
+      .attr("xlink:href", (d) => d.properties.image)
       .style("opacity", "0")
-      .style("fill", "blue")
+      .style("borderRadius", "50%")
       .transition()
-      .duration(2000)
+      .duration(1400)
       .ease(d3.easeLinear)
-      .style("opacity", "1")
-      .style("fill", "red");
+      .style("opacity", "1");
 
     const randomRemove = setInterval(() => {
       let randomIndex = Math.floor(Math.random() * point.length);
@@ -240,7 +291,7 @@ const DataBinding = () => {
       } else {
         setPoint(tempPoint);
       }
-    }, 300);
+    }, 700);
 
     const randomAdd = setInterval(() => {
       let pickRandomCoordinate =
@@ -260,8 +311,7 @@ const DataBinding = () => {
       };
 
       setPoint(tempPoint);
-    }, 300);
-    console.log("-----", point);
+    }, 700);
 
     return () => {
       clearInterval(randomRemove);
@@ -271,7 +321,7 @@ const DataBinding = () => {
 
   return (
     <div>
-      <svg ref={svgRef} width='1600' height='1000'></svg>
+      <svg ref={svgRef} width='1500' height='1000'></svg>
     </div>
   );
 };
