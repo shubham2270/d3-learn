@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import * as d3 from "d3";
 import * as R from "ramda";
 
@@ -210,18 +211,20 @@ const DataBinding = () => {
         },
       ],
     };
-    const projection = d3.geoEquirectangular().scale(200).translate([200, 150]); // convert lon lat to x y
+    const projection = d3.geoEquirectangular().scale(180).translate([395, 270]); // convert lon lat to x y
     const geoGenerator = d3.geoPath().projection(projection);
     const svg = d3.select(svgRef.current);
     const geoGeneratorIndia = d3.geoPath().projection(projection);
 
+    // Render world d3 map
     svg
       .selectAll("path")
       .data(map.features)
       .join("path")
       .attr("d", geoGenerator)
       .attr("stroke", "grey")
-      .attr("fill", "lightgrey");
+      .attr("fill", "lightgrey")
+      .style("display", "none");
 
     // const appendCircle = (selection) => {
     //   svg
@@ -321,6 +324,8 @@ const DataBinding = () => {
 
   return (
     <div>
+      {/* <Image src={`/map.png`} alt='world map' width='1000' height='1600' /> */}
+      <img src='/map.png' alt='world map' width='50%' className='map' />
       <svg ref={svgRef} width='1500' height='1000'></svg>
     </div>
   );
